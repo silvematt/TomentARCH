@@ -6,13 +6,15 @@
 // Max Length of the final archive
 #define MAX_IMG_ARCH_SIZE 256+(MAX_TOC_LENGTH)
 
-// How many images to write
-#define IMG_TO_WRITE_LENGTH 10
+// Max length a string can have in Files.txt
+#define MAX_STR_LENGTH 256
+
+// Max number of imges Files.txt
+#define MAX_IMGS_LENGTH 256
 
 // Destination file
 #define IMG_ARCHIVE_NAME "img.archt"
 
-typedef	unsigned char byte;
 
 // Elements of the Table of Content (MUST BE IN SYNCH WITH THE ENGINE) 
 typedef struct tocElement_s
@@ -35,10 +37,14 @@ typedef enum imgIDs_e
     IMG_ID_C_1,
     IMG_ID_S_Barrel1,
     IMG_ID_S_Campfire,
+    IMG_ID_BLKCRY_TEXT_SHEET,
 } imgIDs_e;
 
 // Filenames to write
-extern char* imgToWrite[IMG_TO_WRITE_LENGTH];
+extern char imgToWrite[MAX_IMGS_LENGTH][MAX_STR_LENGTH];
+extern unsigned imgsToWriteLength;
+
+typedef	unsigned char byte;
 
 // ================================
 // Define which files are to be written

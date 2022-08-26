@@ -1,13 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "archt.h"
 
-char * imgToWrite[IMG_TO_WRITE_LENGTH];
+char imgToWrite[MAX_IMGS_LENGTH][MAX_STR_LENGTH];
+unsigned imgsToWriteLength;
 
 int main()
 {
-    printf("Generating %s...\n\n", IMG_ARCHIVE_NAME);
+    printf("Generating: %s...\n\n", IMG_ARCHIVE_NAME);
 
     InitImgToWrite();
     CreateImgArcht();
@@ -22,16 +25,46 @@ int main()
 // ================================
 void InitImgToWrite(void)
 {
-    imgToWrite[IMG_ID_EDEFAULT_1] = "IMGs/texturefallback.bmp";
-    imgToWrite[IMG_ID_W_1] = "IMGs/wall1.bmp";
-    imgToWrite[IMG_ID_W_1Alt] = "IMGs/wall1alt.bmp";
-    imgToWrite[IMG_ID_W_2] = "IMGs/wall2.bmp";
-    imgToWrite[IMG_ID_WD_Gate1] = "IMGs/gate.bmp";
-    imgToWrite[IMG_ID_WD_Gate1Alt] = "IMGs/gateAlt.bmp";
-    imgToWrite[IMG_ID_F_1] = "IMGs/floor.bmp";
-    imgToWrite[IMG_ID_C_1] = "IMGs/ceiling1.bmp";
-    imgToWrite[IMG_ID_S_Barrel1] = "IMGs/barrel.bmp";
-    imgToWrite[IMG_ID_S_Campfire] = "IMGs/campfire.bmp";
+    printf("Reading Files.txt...\n\n");
+
+    // Read all images to write from File.txt
+    FILE* fp = fopen("Files.txt", "r");
+
+    if(fp == NULL)
+        printf("FATAL ERROR! Could not find 'Files.txt'\n");
+    
+    // Full line
+    char buffer[MAX_STR_LENGTH];
+    
+    imgsToWriteLength = 0;
+    while(fgets(buffer, MAX_STR_LENGTH, fp) != NULL)
+    {
+        char curLine[MAX_STR_LENGTH];   // Current line we're writing
+        char* str;                      // Used to strchr
+        int indx;                       // Index of the =
+        int i;                          // Index for writing in new string
+
+        // Find index for reading after the =
+        str = strchr(buffer, '=');
+        indx = (int)(str - buffer) + 1;
+
+        // Init index for writing
+        i = 0;
+        
+        // Write
+        while(buffer[indx] != ';' && buffer[indx] != '\n' && buffer[indx] != EOF)
+        {
+            curLine[i] = buffer[indx];
+            i++;
+            indx++;
+        }
+        curLine[i] = '\0';
+        printf("%s\n", curLine);
+        strcpy(imgToWrite[imgsToWriteLength], curLine);
+        imgsToWriteLength++;
+    }
+
+    printf("\nDone Reading Files.txt!\n\n");
 }
 
 // ================================
@@ -39,6 +72,8 @@ void InitImgToWrite(void)
 // ================================
 void CreateImgArcht(void)
 {
+    printf("\nCreating archive...\n\n");
+
     // Pointer to destination file
     FILE* archPtr;
 
@@ -48,11 +83,11 @@ void CreateImgArcht(void)
 
     // Archive
     byte* arch[MAX_IMG_ARCH_SIZE];                  // Raw bytes array
-    unsigned long archLength[IMG_TO_WRITE_LENGTH];  // The sizes of the arch Image
+    unsigned long* archLength = (unsigned long *)malloc((imgsToWriteLength) * sizeof(long));;  // The sizes of the arch Image
     unsigned long currentOffset = 0;                // Current offset we're writing at
  
     // Read all the images and save the in the arch bytes array
-    for(int i = 0; i < IMG_TO_WRITE_LENGTH; i++)
+    for(int i = 0; i < imgsToWriteLength; i++)
     {
         // Current file, buffer and length (images can have different lenght)
         FILE* filePtr;
@@ -100,7 +135,7 @@ void CreateImgArcht(void)
         fwrite(&ftocSize, sizeof(ftocSize), 1, archPtr);
 
         // Write the TOC
-        for(int i = 0; i < IMG_TO_WRITE_LENGTH; i++)
+        for(int i = 0; i < imgsToWriteLength; i++)
         {
             fwrite(&toc[i].id, sizeof(toc[i].id), 1, archPtr);                           // Write ID
             fwrite(&toc[i].startingOffset, sizeof(toc[i].startingOffset), 1, archPtr);   // Write Offset
@@ -108,13 +143,13 @@ void CreateImgArcht(void)
         }
 
         // Write the images
-        for(int i = 0; i < IMG_TO_WRITE_LENGTH; i++)
+        for(int i = 0; i < imgsToWriteLength; i++)
             fwrite(arch[i], archLength[i], 1, archPtr);
 
 
     fclose(archPtr);
 
-    printf("\n\nARCH BUILT as: \"%s\" - INFO:\n", IMG_ARCHIVE_NAME);
+    printf("\n\nARCH BUILT as: \"%s\"\nINFO:\n", IMG_ARCHIVE_NAME);
     printf("Size of ToC in bytes: %d\n", tocSize);    
     printf("N. Elements of ToC: %d\n", tocSize / sizeof(tocElement_t));
     printf("\n\nPRESS ENTER TO QUIT\n", IMG_ARCHIVE_NAME);

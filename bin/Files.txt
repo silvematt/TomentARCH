@@ -1,0 +1,11 @@
+IMG_ID_EDEFAULT_1=IMGs/texturefallback.bmp;
+IMG_ID_W_1=IMGs/wall1.bmp;
+IMG_ID_W_1Alt=IMGs/wall1alt.bmp;
+IMG_ID_W_2=IMGs/wall2.bmp;
+IMG_ID_WD_Gate1=IMGs/gate.bmp;
+IMG_ID_WD_Gate1Alt=IMGs/gateAlt.bmp;
+IMG_ID_F_1=IMGs/floor.bmp;
+IMG_ID_C_1=IMGs/ceiling1.bmp;
+IMG_ID_S_Barrel1=IMGs/barrel.bmp;
+IMG_ID_S_Campfire=IMGs/campfire.bmp;
+IMG_ID_BLKCRY_TEXT_SHEET=IMGs/F_BLKCHCRY.bmp;
