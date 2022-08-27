@@ -24,22 +24,6 @@ typedef struct tocElement_s
     uint32_t size;
 } tocElement_t;
 
-// IDs of the Images (MUST BE IN SYNCH WITH THE ENGINE) 
-typedef enum imgIDs_e
-{
-    IMG_ID_EDEFAULT_1 = 0,
-    IMG_ID_W_1,
-    IMG_ID_W_1Alt,
-    IMG_ID_W_2,
-    IMG_ID_WD_Gate1,
-    IMG_ID_WD_Gate1Alt,
-    IMG_ID_F_1,
-    IMG_ID_C_1,
-    IMG_ID_S_Barrel1,
-    IMG_ID_S_Campfire,
-    IMG_ID_BLKCRY_TEXT_SHEET,
-} imgIDs_e;
-
 // Filenames to write
 extern char imgToWrite[MAX_IMGS_LENGTH][MAX_STR_LENGTH];
 extern unsigned imgsToWriteLength;

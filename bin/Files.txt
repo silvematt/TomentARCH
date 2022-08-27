@@ -9,3 +9,4 @@ IMG_ID_C_1=IMGs/ceiling1.bmp;
 IMG_ID_S_Barrel1=IMGs/barrel.bmp;
 IMG_ID_S_Campfire=IMGs/campfire.bmp;
 IMG_ID_BLKCRY_TEXT_SHEET=IMGs/F_BLKCHCRY.bmp;
+IMG_ID_SELECT_CURSOR=IMGs/select_cursor.bmp;
